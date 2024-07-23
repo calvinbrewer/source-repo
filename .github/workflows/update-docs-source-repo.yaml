@@ -28,6 +28,7 @@ jobs:
       - name: Copy Docs
         run: |
           rm -rf dest-repo/src/app/docs
+          mkdir -p dest-repo/src/app
           cp -r source-repo/docs dest-repo/src/app
 
       - name: Commit Changes

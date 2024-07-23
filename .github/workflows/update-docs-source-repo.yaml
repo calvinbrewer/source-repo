@@ -11,11 +11,16 @@ jobs:
 
     steps:
       - name: Checkout Source Repo
+        id: source
         uses: actions/checkout@v3
         with:
           repository: "calvinbrewer/source-repo"
           path: source-repo
           token: ${{ secrets.SOURCE_REPO_ACCESS_TOKEN }}
+
+      - name: Get Source Commit Hash
+        id: get-source-hash
+        run: echo "::set-output name=hash::$(git -C source-repo rev-parse --short HEAD)"
 
       - name: Checkout Dest Repo
         uses: actions/checkout@v3
@@ -42,7 +47,7 @@ jobs:
           git config --global user.name 'github-actions-sync-docs[bot]'
           git config --global user.email 'github-actions-sync-docs[bot]@users.noreply.github.com'
           git add src/app/docs
-          git commit -m "Update docs from source repo"
+          git commit -m "Update docs from source repo" --allow-empty
 
       - name: Push Changes
         run: |

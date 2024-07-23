@@ -27,7 +27,7 @@ jobs:
 
       - name: Create New Branch
         run: |
-          cd destination-repo
+          cd dest-repo
           git checkout -b update-docs-${{ steps.get-source-hash.outputs.hash }}
 
       - name: Copy Docs

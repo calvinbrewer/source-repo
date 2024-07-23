@@ -25,6 +25,11 @@ jobs:
           token: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
           fetch-depth: 0 # Necessary for pushing commits
 
+      - name: Create New Branch
+        run: |
+          cd destination-repo
+          git checkout -b update-docs-${{ steps.get-source-hash.outputs.hash }}
+
       - name: Copy Docs
         run: |
           rm -rf dest-repo/src/app/docs
@@ -43,3 +48,12 @@ jobs:
         run: |
           cd dest-repo
           git push origin main
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
+          head: update-docs-${{ steps.get-source-hash.outputs.hash }}
+          base: main
+          title: "Update docs from source repo at commit ${{ steps.get-source-hash.outputs.hash }}"
+          body: "This PR updates the docs directory from the source repository."

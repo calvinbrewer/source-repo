@@ -41,18 +41,18 @@ jobs:
           mkdir -p dest-repo/src/app
           cp -r source-repo/docs dest-repo/src/app
 
-      # - name: Commit Changes
-      #   run: |
-      #     cd dest-repo
-      #     git config --global user.name 'github-actions-sync-docs[bot]'
-      #     git config --global user.email 'github-actions-sync-docs[bot]@users.noreply.github.com'
-      #     git add src/app/docs
-      #     git commit -m "Update docs from source repo" --allow-empty
+      - name: Commit Changes
+        run: |
+          cd dest-repo
+          git config --global user.name 'github-actions-sync-docs[bot]'
+          git config --global user.email 'github-actions-sync-docs[bot]@users.noreply.github.com'
+          git add src/app/docs
+          git commit -m "Update docs from source repo" --allow-empty
 
-      # - name: Push Changes
-      #   run: |
-      #     cd dest-repo
-      #     git push origin update-docs-${{ steps.get-source-hash.outputs.hash }}
+      - name: Push Changes
+        run: |
+          cd dest-repo
+          git push origin update-docs-${{ steps.get-source-hash.outputs.hash }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6

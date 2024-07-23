@@ -55,10 +55,10 @@ jobs:
           git push origin main
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
-          head: update-docs-${{ steps.get-source-hash.outputs.hash }}
+          branch: update-docs-${{ steps.get-source-hash.outputs.hash }}
           base: main
           title: "Update docs from source repo at commit ${{ steps.get-source-hash.outputs.hash }}"
-          body: "This PR updates the docs directory from the source repository."
+          body: "Automated changes by cipherstash/docs-sync-action"

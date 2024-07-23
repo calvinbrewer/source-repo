@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout Source Repo
         id: source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: "calvinbrewer/source-repo"
           path: source-repo
@@ -23,7 +23,7 @@ jobs:
         run: echo "::set-output name=hash::$(git -C source-repo rev-parse --short HEAD)"
 
       - name: Checkout Dest Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: "calvinbrewer/dest-repo"
           path: dest-repo
@@ -49,6 +49,11 @@ jobs:
           git add src/app/docs
           git commit -m "Update docs from source repo" --allow-empty
 
+      - name: Push Changes
+        run: |
+          cd dest-repo
+          git push origin update-docs-${{ steps.get-source-hash.outputs.hash }}
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -57,3 +62,4 @@ jobs:
           base: main
           title: "Update docs from source repo at commit ${{ steps.get-source-hash.outputs.hash }}"
           body: "Automated changes by cipherstash/docs-sync-action"
+          path: dest-repo

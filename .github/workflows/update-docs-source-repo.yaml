@@ -49,11 +49,6 @@ jobs:
           git add src/app/docs
           git commit -m "Update docs from source repo" --allow-empty
 
-      - name: Push Changes
-        run: |
-          cd dest-repo
-          git push origin main
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:

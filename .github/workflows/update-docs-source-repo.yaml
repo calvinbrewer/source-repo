@@ -1,0 +1,44 @@
+name: Copy Docs to dest Repo
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on push to the main branch
+
+jobs:
+  copy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Repo
+        uses: actions/checkout@v3
+        with:
+          repository: "calvinbrewer/source-repo"
+          path: source-repo
+          token: ${{ secrets.SOURCE_REPO_ACCESS_TOKEN }}
+
+      - name: Checkout Dest Repo
+        uses: actions/checkout@v3
+        with:
+          repository: "calvinbrewer/dest-repo"
+          path: dest-repo
+          token: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
+          fetch-depth: 0 # Necessary for pushing commits
+
+      - name: Copy Docs
+        run: |
+          rm -rf dest-repo/src/app/docs
+          cp -r source-repo/docs dest-repo/src/app
+
+      - name: Commit Changes
+        run: |
+          cd dest-repo
+          git config --global user.name 'github-actions-sync-docs[bot]'
+          git config --global user.email 'github-actions-sync-docs[bot]@users.noreply.github.com'
+          git add src/app/docs
+          git commit -m "Update docs from source repo"
+
+      - name: Push Changes
+        run: |
+          cd dest-repo
+          git push origin main

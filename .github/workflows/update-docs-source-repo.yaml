@@ -13,10 +13,6 @@ jobs:
       - name: Checkout Source Repo
         id: source
         uses: actions/checkout@v4
-        with:
-          repository: "calvinbrewer/source-repo"
-          path: source-repo
-          ssh-key: ${{ secrets.SOURCE_REPO_ACCESS_TOKEN }}
 
       - name: Get Source Commit Hash
         id: get-source-hash

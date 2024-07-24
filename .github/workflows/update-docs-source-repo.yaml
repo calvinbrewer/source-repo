@@ -13,6 +13,8 @@ jobs:
       - name: Checkout Source Repo
         id: source
         uses: actions/checkout@v4
+        with:
+          path: source-repo
 
       - name: Get Source Commit Hash
         id: get-source-hash

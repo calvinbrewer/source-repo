@@ -1,4 +1,4 @@
-name: Copy Docs to dest Repo
+name: Copy Docs to Dest Repo
 
 on:
   push:
@@ -36,15 +36,27 @@ jobs:
           mkdir -p dest-repo/src/app
           cp -r source-repo/docs dest-repo/src/app
 
+      - name: Check for Changes
+        id: check-changes
+        run: |
+          cd dest-repo
+          git add src/app/docs
+          if git diff --cached --quiet; then
+            echo "::set-output name=changes::false"
+          else
+            echo "::set-output name=changes::true"
+          fi
+
       - name: Commit Changes
+        if: steps.check-changes.outputs.changes == 'true'
         run: |
           cd dest-repo
           git config --global user.name 'github-actions-sync-docs[bot]'
           git config --global user.email 'github-actions-sync-docs[bot]@users.noreply.github.com'
-          git add src/app/docs
-          git commit -m "Update docs from source repo at commit ${{ steps.get-source-hash.outputs.hash }}" --allow-empty
+          git commit -m "Update docs from source repo at commit ${{ steps.get-source-hash.outputs.hash }}"
 
       - name: Push Changes
+        if: steps.check-changes.outputs.changes == 'true'
         run: |
           cd dest-repo
           git push origin main

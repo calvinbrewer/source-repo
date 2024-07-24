@@ -16,7 +16,7 @@ jobs:
         with:
           repository: "calvinbrewer/source-repo"
           path: source-repo
-          token: ${{ secrets.SOURCE_REPO_ACCESS_TOKEN }}
+          ssh-key: ${{ secrets.SOURCE_REPO_ACCESS_TOKEN }}
 
       - name: Get Source Commit Hash
         id: get-source-hash
@@ -27,7 +27,7 @@ jobs:
         with:
           repository: "calvinbrewer/dest-repo"
           path: dest-repo
-          token: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
+          ssh-key: ${{ secrets.DEST_REPO_ACCESS_TOKEN }}
           fetch-depth: 0 # Necessary for pushing commits
 
       - name: Copy Docs
